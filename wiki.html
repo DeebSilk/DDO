@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Вики · Deep Dive Online</title>
+  <style>
+    :root {
+      --bg:      #313338;
+      --surface: #2b2d31;
+      --surface-deep: #1e1f22;
+      --fg:      #dbdee1;
+      --fg-2:    #f2f3f5;
+      --muted:   #949ba4;
+      --border:  rgba(255, 255, 255, 0.06);
+      --accent:  #00a8fc;
+      --success: #23a55a;
+
+      --accent-soft: rgba(0, 168, 252, 0.14);
+      --fg-soft:     rgba(219, 222, 225, 0.06);
+
+      --font-display: "gg sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --font-body:    "gg sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --font-mono:    "gg mono", ui-monospace, 'JetBrains Mono', 'SF Mono', Menlo, monospace;
+
+      --gap-md: 20px;
+      --gap-lg: 32px;
+      --container: 1120px;
+      --gutter: 32px;
+      --radius: 4px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    a { color: inherit; text-decoration: none; }
+    h1, h2, h3 { color: var(--fg-2); margin: 0; }
+
+    .container { max-width: var(--container); margin-inline: auto; padding-inline: var(--gutter); }
+
+    .topnav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(30, 31, 34, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .topnav-inner { display: flex; align-items: center; justify-content: space-between; padding-block: 16px; }
+    .logo { font-size: 20px; font-weight: 800; color: var(--fg-2); letter-spacing: -0.02em; display: flex; align-items: center; gap: 8px; }
+    .logo-icon { width: 24px; height: 24px; background: var(--accent); border-radius: 6px; }
+    .topnav nav { display: flex; gap: var(--gap-lg); }
+    .topnav nav a { font-size: 14px; font-weight: 500; color: var(--muted); }
+    .topnav nav a:hover, .topnav nav a.active { color: var(--fg-2); }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 10px 24px; border-radius: var(--radius); border: none;
+      font-size: 15px; font-weight: 600; cursor: pointer;
+    }
+    .btn-primary { background: var(--accent); color: white; }
+
+    .wiki-layout { display: grid; grid-template-columns: 260px 1fr; gap: 48px; padding-block: 64px; }
+    @media (max-width: 900px) { .wiki-layout { grid-template-columns: 1fr; } }
+
+    .wiki-sidebar { position: sticky; top: 100px; align-self: start; }
+    .wiki-nav-group { margin-bottom: 32px; }
+    .wiki-nav-title { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+    .wiki-nav-links { display: flex; flex-direction: column; gap: 4px; }
+    .wiki-nav-links a {
+      padding: 8px 12px; border-radius: 4px; font-size: 14px; color: var(--muted); transition: all 0.2s ease;
+    }
+    .wiki-nav-links a:hover, .wiki-nav-links a.active {
+      background: var(--fg-soft); color: var(--fg-2);
+    }
+
+    .wiki-content h1 { font-size: 40px; margin-bottom: 24px; }
+    .wiki-content h2 { font-size: 24px; margin-top: 48px; margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+    .wiki-content p { margin-bottom: 16px; line-height: 1.7; color: var(--fg); }
+
+    .card-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 24px; }
+    @media (max-width: 600px) { .card-grid { grid-template-columns: 1fr; } }
+    .wiki-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px;
+    }
+    .wiki-card h3 { font-size: 18px; margin-bottom: 8px; color: var(--accent); }
+    .wiki-card p { font-size: 14px; color: var(--muted); margin: 0; }
+
+    .pagefoot { padding-block: 64px; border-top: 1px solid var(--border); color: var(--muted); font-size: 14px; }
+    .pagefoot-inner { display: flex; justify-content: space-between; align-items: center; }
+  </style>
+</head>
+<body>
+  <header class="topnav">
+    <div class="container topnav-inner">
+      <a href="index.html" class="logo">
+        <div class="logo-icon"></div>
+        DEEP DIVE ONLINE
+      </a>
+      <nav>
+        <a href="index.html">Главная</a>
+        <a href="wiki.html" class="active">Вики</a>
+        <a href="map.html">Карта</a>
+        <a href="donate.html">Донат</a>
+      </nav>
+      <button class="btn btn-primary">Играть сейчас</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="wiki-layout">
+      <aside class="wiki-sidebar" data-od-id="wiki-nav">
+        <div class="wiki-nav-group">
+          <div class="wiki-nav-title">Навигация</div>
+          <div class="wiki-nav-links">
+            <a href="#classes" class="active">Классы персонажей</a>
+            <a href="#bestiary">Бестиарий</a>
+            <a href="#crafting">Система крафта</a>
+            <a href="#lore">Лор мира</a>
+          </div>
+        </div>
+        <div class="wiki-nav-group">
+          <div class="wiki-nav-title">Популярное</div>
+          <div class="wiki-nav-links">
+            <a href="#">Мечник (Swordman)</a>
+            <a href="#">Лес Древних</a>
+            <a href="#">Кристаллы маны</a>
+          </div>
+        </div>
+      </aside>
+
+      <article class="wiki-content">
+        <section id="classes" data-od-id="wiki-classes">
+          <h1>Классы персонажей</h1>
+          <p>В Deep Dive Online система классов построена на гибкости и специализации. Каждый игрок начинает путь "Новичком" и на 10-м уровне выбирает одну из базовых специализаций.</p>
+          
+          <div class="card-grid">
+            <div class="wiki-card">
+              <h3>Мечник (Swordsman)</h3>
+              <p>Мастер ближнего боя. Высокая защита и стабильный урон. Идеален для танкования боссов.</p>
+            </div>
+            <div class="wiki-card">
+              <h3>Лучник (Archer)</h3>
+              <p>Специалист по дальнему бою. Высокая скорость атаки и шанс критического удара.</p>
+            </div>
+            <div class="wiki-card">
+              <h3>Маг (Mage)</h3>
+              <p>Повелитель стихий. Огромный урон по площади, но низкая выживаемость в ближнем бою.</p>
+            </div>
+            <div class="wiki-card">
+              <h3>Тень (Rogue)</h3>
+              <p>Мастер скрытности. Наносит сокрушительные удары в спину и использует яды.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="bestiary" data-od-id="wiki-bestiary">
+          <h2>Бестиарий</h2>
+          <p>Мир населен опасными существами. Каждая зона имеет своих уникальных монстров и мировых боссов.</p>
+          <div class="wiki-card" style="margin-bottom: 12px;">
+            <div style="display: flex; gap: 16px; align-items: center;">
+              <div style="width: 60px; height: 60px; background: var(--surface-deep); border-radius: 8px;"></div>
+              <div>
+                <h3 style="margin-bottom: 4px;">Лесной Волк (Lvl 1-5)</h3>
+                <p>Агрессивный зверь, обитающий в стартовой локации. Нападает стаями.</p>
+              </div>
+            </div>
+          </div>
+          <div class="wiki-card">
+            <div style="display: flex; gap: 16px; align-items: center;">
+              <div style="width: 60px; height: 60px; background: var(--surface-deep); border-radius: 8px;"></div>
+              <div>
+                <h3 style="margin-bottom: 4px;">Изумрудный Дракон (World Boss)</h3>
+                <p>Древний защитник Небесного Замка. Требует рейда из 40 человек.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="crafting" data-od-id="wiki-crafting">
+          <h2>Система крафта</h2>
+          <p>Крафт — сердце экономики. Игроки могут собирать ресурсы и создавать уникальное снаряжение.</p>
+          <ul>
+            <li style="margin-bottom: 8px;"><strong>Кузнечное дело:</strong> Создание мечей, щитов и тяжелой брони.</li>
+            <li style="margin-bottom: 8px;"><strong>Алхимия:</strong> Варка зелий восстановления маны и здоровья.</li>
+            <li style="margin-bottom: 8px;"><strong>Начертание:</strong> Наложение магических рун на экипировку.</li>
+          </ul>
+        </section>
+
+        <section id="lore" data-od-id="wiki-lore">
+          <h2>Лор мира</h2>
+          <p>История Deep Dive Online началась с Великого Слияния реальностей. Две тысячи лет назад мир был разделен на 100 этажей, каждый из которых представляет собой уникальную экосистему.</p>
+          <p>Основная цель игроков — пройти все испытания и достичь вершины, где ждет Создатель.</p>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <footer class="pagefoot">
+    <div class="container pagefoot-inner">
+      <div>
+        <div class="logo" style="font-size: 16px; margin-bottom: 8px;">DEEP DIVE ONLINE</div>
+        <p style="font-size: 12px; color: var(--muted);">© 2026 Deep Dive Online. Все права защищены.</p>
+      </div>
+      <div style="display: flex; gap: 24px;">
+        <a href="#">Discord</a>
+        <a href="#">VKontakte</a>
+        <a href="#">YouTube</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
