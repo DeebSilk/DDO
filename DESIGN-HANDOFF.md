@@ -11,7 +11,7 @@ This archive is the source of truth for turning the design into production code.
 
 ## Source map
 - Primary entry: `index.html`
-- HTML screens detected: 5
+- HTML screens detected: 4
 - Stylesheets detected: 0
 - Script/component files detected: 0
 - Supporting assets detected: 0
@@ -63,7 +63,6 @@ For responsive web exports, treat these as a modern breakpoint system for one ad
 8. Compare final screenshots against the export at 360×800, 390×844, 430×932, 820×1180, 1024×768, 1366×768, 1440×900, and 1920×1080 before declaring done.
 
 ## Entry points
-- `deep-dive-portal.html`
 - `donate.html`
 - `index.html`
 - `map.html`

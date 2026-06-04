@@ -135,6 +135,22 @@
 
     .eyebrow { font-family: var(--font-mono); font-size: 12px; color: var(--accent); font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
 
+    /* Media & Updates Styles */
+    .ph-img {
+      width: 100%; aspect-ratio: 16/9; background: var(--surface-deep);
+      border-radius: var(--radius-lg); border: 1px solid var(--border);
+      display: grid; place-items: center; color: var(--muted);
+      font-size: 14px; position: relative; overflow: hidden;
+    }
+    .ph-img::after {
+      content: "MEDIA / SCREENSHOT / VIDEO"; font-family: var(--font-mono); font-weight: 600;
+      opacity: 0.2;
+    }
+    .media-card { background: var(--surface); border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border); transition: transform 0.2s ease; }
+    .media-card:hover { transform: translateY(-4px); border-color: var(--accent); }
+    .media-content { padding: 20px; }
+    .media-tag { font-size: 11px; color: var(--accent); font-weight: 700; text-transform: uppercase; margin-bottom: 8px; display: block; }
+
     /* Custom visual for "sky blue" and "grass green" elements */
     .sky-glow { color: var(--accent); text-shadow: 0 0 20px var(--accent-soft); }
     .grass-accent { color: var(--success); }
@@ -181,7 +197,7 @@
               <p style="font-size: 14px; color: var(--muted);">Мы работаем над улучшением графики и баланса классов.</p>
             </div>
           </div>
-          <div class="btn btn-outline" style="font-size: 13px;">Roadmap 2026</div>
+          <div class="btn btn-outline" style="font-size: 13px;">(когда доделаю)</div>
         </div>
 
         <div class="grid-3">
@@ -210,6 +226,58 @@
       </div>
     </section>
 
+    <section class="section" data-od-id="media-updates">
+      <div class="container">
+        <div style="margin-bottom: 48px;">
+          <p class="eyebrow">Медиа и Обновления</p>
+          <h2>Что нового в проекте?</h2>
+        </div>
+        <div class="grid-3">
+          <div class="media-card">
+            <div class="ph-img"></div>
+            <div class="media-content">
+              <span class="media-tag">Скриншот</span>
+              <h3 style="font-size: 18px; margin-bottom: 8px;">Новые эффекты неба</h3>
+              <p style="font-size: 14px; color: var(--muted);">Мы обновили рендеринг атмосферы для создания более глубокого чувства погружения.</p>
+            </div>
+          </div>
+          <div class="media-card">
+            <div class="ph-img"></div>
+            <div class="media-content">
+              <span class="media-tag">Видео</span>
+              <h3 style="font-size: 18px; margin-bottom: 8px;">Тизер боевой системы</h3>
+              <p style="font-size: 14px; color: var(--muted);">Посмотрите, как работают комбо-атаки и магические способности в реальном времени.</p>
+            </div>
+          </div>
+          <div class="media-card">
+            <div class="ph-img"></div>
+            <div class="media-content">
+              <span class="media-tag">Разработка</span>
+              <h3 style="font-size: 18px; margin-bottom: 8px;">Система крафта</h3>
+              <p style="font-size: 14px; color: var(--muted);">Первый взгляд на интерфейс создания предметов и улучшения снаряжения.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" data-od-id="community">
+      <div class="container">
+        <div style="background: var(--surface); border: 1px solid var(--accent); border-radius: 12px; padding: 48px; text-align: center; position: relative; overflow: hidden;">
+          <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: var(--accent-soft); border-radius: 50%; z-index: 0;"></div>
+          <div style="position: relative; z-index: 1;">
+            <p class="eyebrow">Сообщество</p>
+            <h2 style="margin-bottom: 16px;">Присоединяйся к нашему Discord</h2>
+            <p style="color: var(--muted); max-width: 500px; margin: 0 auto 32px;">Обсуждай игру с разработчиками, находи союзников для рейдов и первым узнавай о новых обновлениях.</p>
+            <a href="https://discord.gg/4eaTYPNJUj" target="_blank" class="btn btn-primary" style="gap: 12px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037 19.736 19.736 0 0 0-4.885 1.515.069.069 0 0 0-.032.027C.533 9.048-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.23 10.23 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.927 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993.033.047.084.056.084.028a19.876 19.876 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.419-2.157 2.419zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.419-2.157 2.419z"/></svg>
+              Вступить в Discord
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="section" style="background: var(--surface-deep); border-top: 1px solid var(--border);" data-od-id="lore">
       <div class="container">
         <div style="text-align: center; margin-bottom: 56px;">
@@ -231,7 +299,7 @@
         <p style="font-size: 12px; color: var(--muted);">© 2026 Deep Dive Online. Все права защищены. Игра находится в разработке.</p>
       </div>
       <div style="display: flex; gap: 24px;">
-        <a href="#">Discord</a>
+        <a href="https://discord.gg/4eaTYPNJUj" target="_blank">Discord</a>
         <a href="#">VKontakte</a>
         <a href="#">YouTube</a>
       </div>
