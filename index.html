@@ -75,10 +75,50 @@
     }
     .topnav-inner { display: flex; align-items: center; justify-content: space-between; padding-block: 16px; }
     .logo { font-size: 20px; font-weight: 800; color: var(--fg-2); letter-spacing: -0.02em; display: flex; align-items: center; gap: 8px; }
-    .logo-icon { width: 24px; height: 24px; background: var(--accent); border-radius: 6px; }
+    .logo-icon { width: 24px; height: 24px; background: var(--accent); border-radius: 6px; flex-shrink: 0; }
     .topnav nav { display: flex; gap: var(--gap-lg); }
-    .topnav nav a { font-size: 14px; font-weight: 500; color: var(--muted); }
+    .topnav nav a { font-size: 14px; font-weight: 500; color: var(--muted); white-space: nowrap; }
     .topnav nav a:hover, .topnav nav a.active { color: var(--fg-2); }
+    .topnav .btn { flex-shrink: 0; }
+
+    .nav-toggle {
+      display: none; flex-direction: column; gap: 5px; cursor: pointer;
+      background: none; border: none; padding: 8px; z-index: 200;
+    }
+    .nav-toggle span {
+      display: block; width: 22px; height: 2px; background: var(--fg-2);
+      border-radius: 2px; transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    .nav-toggle.is-active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-toggle.is-active span:nth-child(2) { opacity: 0; }
+    .nav-toggle.is-active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .nav-overlay {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+      z-index: 50; opacity: 0; transition: opacity 0.3s ease;
+    }
+    .nav-overlay.is-open { display: block; opacity: 1; }
+
+    @media (max-width: 820px) {
+      .topnav nav {
+        position: fixed; top: 0; right: -280px; width: 260px; height: 100vh;
+        background: var(--surface-deep); flex-direction: column; gap: 4px;
+        padding: 80px 24px 24px; z-index: 100; transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border-left: 1px solid var(--border); box-shadow: -20px 0 40px rgba(0,0,0,0.4);
+      }
+      .topnav nav.is-open { right: 0; }
+      .topnav nav a { font-size: 16px; padding: 12px 16px; border-radius: 6px; white-space: normal; }
+      .topnav nav a:hover { background: var(--fg-soft); }
+      .topnav .btn { display: none; }
+      .nav-toggle { display: flex; }
+      .topnav-inner .btn-mobile {
+        display: inline-flex; margin-top: 8px;
+      }
+    }
+    @media (max-width: 480px) {
+      .topnav-inner { padding-block: 12px; }
+      .logo { font-size: 16px; }
+    }
 
     .btn {
       display: inline-flex; align-items: center; justify-content: center;
@@ -98,7 +138,7 @@
     }
     .badge-dev { background: var(--success-soft); color: var(--success); border: 1px solid var(--success); }
 
-    .hero { text-align: center; padding-block: 120px 80px; position: relative; overflow: hidden; }
+    .hero { text-align: center; padding-block: clamp(64px, 12vw, 120px) clamp(48px, 8vw, 80px); position: relative; overflow: hidden; }
     .hero-bg {
       position: absolute; top: 0; left: 0; width: 100%; height: 100%;
       background: radial-gradient(circle at 50% 30%, var(--accent-soft) 0%, transparent 70%);
@@ -109,7 +149,8 @@
     .hero-ctas { display: flex; gap: 16px; justify-content: center; }
 
     .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gap-lg); }
-    @media (max-width: 800px) { .grid-3 { grid-template-columns: 1fr; } }
+    @media (max-width: 920px) { .grid-3 { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px) { .grid-3 { grid-template-columns: 1fr; } }
 
     .feature-card {
       background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg);
@@ -125,13 +166,16 @@
 
     .status-banner {
       background: var(--surface-deep); border: 1px solid var(--border); border-radius: 12px;
-      padding: 24px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 80px;
+      padding: 24px; display: flex; align-items: center; justify-content: space-between; margin-bottom: clamp(48px, 8vw, 80px); gap: 16px;
     }
+    @media (max-width: 600px) { .status-banner { flex-direction: column; text-align: center; } }
     .status-info { display: flex; align-items: center; gap: 16px; }
+    @media (max-width: 600px) { .status-info { flex-direction: column; } }
     .status-dot { width: 12px; height: 12px; background: var(--success); border-radius: 50%; box-shadow: 0 0 12px var(--success); }
 
-    .pagefoot { padding-block: 64px; border-top: 1px solid var(--border); color: var(--muted); font-size: 14px; }
-    .pagefoot-inner { display: flex; justify-content: space-between; align-items: center; }
+    .pagefoot { padding-block: clamp(40px, 6vw, 64px); border-top: 1px solid var(--border); color: var(--muted); font-size: 14px; }
+    .pagefoot-inner { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+    @media (max-width: 600px) { .pagefoot-inner { flex-direction: column; text-align: center; } }
 
     .eyebrow { font-family: var(--font-mono); font-size: 12px; color: var(--accent); font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
 
@@ -154,6 +198,64 @@
     /* Custom visual for "sky blue" and "grass green" elements */
     .sky-glow { color: var(--accent); text-shadow: 0 0 20px var(--accent-soft); }
     .grass-accent { color: var(--success); }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes pulse-dot {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 12px var(--success); }
+      50%      { transform: scale(1.3); box-shadow: 0 0 24px var(--success); }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(-16px); }
+    }
+    @keyframes glow-pulse {
+      0%, 100% { opacity: 0.4; }
+      50%      { opacity: 0.8; }
+    }
+    @keyframes shimmer {
+      0%   { background-position: -200% center; }
+      100% { background-position: 200% center; }
+    }
+
+    .reveal {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.visible {
+      opacity: 1; transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    .animate-float { animation: float 6s ease-in-out infinite; }
+    .animate-glow { animation: glow-pulse 3s ease-in-out infinite; }
+
+    .status-dot { animation: pulse-dot 2s ease-in-out infinite; }
+
+    .hero-bg::before {
+      content: ''; position: absolute; inset: 0; z-index: 0;
+      background:
+        radial-gradient(circle at 25% 40%, rgba(0, 168, 252, 0.10) 0%, transparent 50%),
+        radial-gradient(circle at 75% 60%, rgba(35, 165, 90, 0.06) 0%, transparent 50%);
+      animation: glow-pulse 5s ease-in-out infinite alternate;
+    }
+
+    .hero-bg::after {
+      content: ''; position: absolute; inset: 0; z-index: 0;
+      background: radial-gradient(circle at 50% 20%, rgba(0, 168, 252, 0.05) 0%, transparent 40%);
+      animation: float 8s ease-in-out infinite;
+    }
   </style>
 </head>
 <body>
@@ -163,18 +265,24 @@
         <div class="logo-icon"></div>
         DEEP DIVE ONLINE
       </a>
-      <nav>
+      <nav id="mainNav">
         <a href="index.html" class="active">Главная</a>
         <a href="wiki.html">Вики</a>
         <a href="map.html">Карта</a>
         <a href="donate.html">Донат</a>
+        <a href="minigame.html">Мини-игра</a>
+        <a href="#" class="btn btn-primary" style="display:none; text-align:center; margin-top:8px;" id="mobileCta">Играть сейчас</a>
       </nav>
-      <button class="btn btn-primary">Играть сейчас</button>
+      <button class="btn btn-primary" id="desktopCta">Играть сейчас</button>
+      <button class="nav-toggle" id="navToggle" aria-label="Меню">
+        <span></span><span></span><span></span>
+      </button>
     </div>
+    <div class="nav-overlay" id="navOverlay"></div>
   </header>
 
   <main>
-    <section class="hero" data-od-id="hero">
+    <section class="hero reveal" data-od-id="hero">
       <div class="hero-bg"></div>
       <div class="container">
         <span class="badge badge-dev">В разработке</span>
@@ -189,7 +297,7 @@
 
     <section class="section" data-od-id="features">
       <div class="container">
-        <div class="status-banner">
+        <div class="status-banner reveal">
           <div class="status-info">
             <div class="status-dot"></div>
             <div>
@@ -201,21 +309,21 @@
         </div>
 
         <div class="grid-3">
-          <div class="feature-card">
+          <div class="feature-card reveal reveal-delay-1">
             <div class="feature-icon">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
             </div>
             <h3>Уникальные классы</h3>
             <p>Выбирай свой путь из 12 базовых и десятков продвинутых классов. Мастер меча или повелитель стихий?</p>
           </div>
-          <div class="feature-card">
+          <div class="feature-card reveal reveal-delay-2">
             <div class="feature-icon">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
             </div>
             <h3>Интерактивная карта</h3>
             <p>Исследуй бескрайние просторы от небесных замков до густых лесов. Находи скрытые квесты и сокровища.</p>
           </div>
-          <div class="feature-card">
+          <div class="feature-card reveal reveal-delay-3">
             <div class="feature-icon">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
             </div>
@@ -228,12 +336,12 @@
 
     <section class="section" data-od-id="media-updates">
       <div class="container">
-        <div style="margin-bottom: 48px;">
+        <div class="reveal" style="margin-bottom: 48px;">
           <p class="eyebrow">Медиа и Обновления</p>
           <h2>Что нового в проекте?</h2>
         </div>
         <div class="grid-3">
-          <div class="media-card">
+          <div class="media-card reveal reveal-delay-1">
             <div class="ph-img"></div>
             <div class="media-content">
               <span class="media-tag">Скриншот</span>
@@ -241,7 +349,7 @@
               <p style="font-size: 14px; color: var(--muted);">Мы обновили рендеринг атмосферы для создания более глубокого чувства погружения.</p>
             </div>
           </div>
-          <div class="media-card">
+          <div class="media-card reveal reveal-delay-2">
             <div class="ph-img"></div>
             <div class="media-content">
               <span class="media-tag">Видео</span>
@@ -249,7 +357,7 @@
               <p style="font-size: 14px; color: var(--muted);">Посмотрите, как работают комбо-атаки и магические способности в реальном времени.</p>
             </div>
           </div>
-          <div class="media-card">
+          <div class="media-card reveal reveal-delay-3">
             <div class="ph-img"></div>
             <div class="media-content">
               <span class="media-tag">Разработка</span>
@@ -261,9 +369,9 @@
       </div>
     </section>
 
-    <section class="section" data-od-id="community">
+    <section class="section reveal" data-od-id="community">
       <div class="container">
-        <div style="background: var(--surface); border: 1px solid var(--accent); border-radius: 12px; padding: 48px; text-align: center; position: relative; overflow: hidden;">
+        <div style="background: var(--surface); border: 1px solid var(--accent); border-radius: 12px; padding: clamp(32px, 5vw, 48px); text-align: center; position: relative; overflow: hidden;">
           <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: var(--accent-soft); border-radius: 50%; z-index: 0;"></div>
           <div style="position: relative; z-index: 1;">
             <p class="eyebrow">Сообщество</p>
@@ -278,7 +386,7 @@
       </div>
     </section>
 
-    <section class="section" style="background: var(--surface-deep); border-top: 1px solid var(--border);" data-od-id="lore">
+    <section class="section reveal" style="background: var(--surface-deep); border-top: 1px solid var(--border);" data-od-id="lore">
       <div class="container">
         <div style="text-align: center; margin-bottom: 56px;">
           <p class="eyebrow">Мир Айнкрада</p>
@@ -305,5 +413,55 @@
       </div>
     </div>
   </footer>
+
+  <script>
+    const navToggle = document.getElementById('navToggle');
+    const mainNav = document.getElementById('mainNav');
+    const navOverlay = document.getElementById('navOverlay');
+    const mobileCta = document.getElementById('mobileCta');
+    const desktopCta = document.getElementById('desktopCta');
+
+    function isMobile() { return window.innerWidth <= 820; }
+
+    function updateNav() {
+      if (isMobile()) {
+        mobileCta.style.display = 'block';
+        desktopCta.style.display = 'none';
+      } else {
+        mobileCta.style.display = 'none';
+        desktopCta.style.display = 'inline-flex';
+        mainNav.classList.remove('is-open');
+        navOverlay.classList.remove('is-open');
+        navToggle.classList.remove('is-active');
+      }
+    }
+
+    navToggle.addEventListener('click', () => {
+      mainNav.classList.toggle('is-open');
+      navOverlay.classList.toggle('is-open');
+      navToggle.classList.toggle('is-active');
+    });
+
+    navOverlay.addEventListener('click', () => {
+      mainNav.classList.remove('is-open');
+      navOverlay.classList.remove('is-open');
+      navToggle.classList.remove('is-active');
+    });
+
+    window.addEventListener('resize', updateNav);
+    updateNav();
+
+    // Scroll reveal animations
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+  </script>
 </body>
 </html>

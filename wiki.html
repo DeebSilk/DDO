@@ -56,10 +56,47 @@
     }
     .topnav-inner { display: flex; align-items: center; justify-content: space-between; padding-block: 16px; }
     .logo { font-size: 20px; font-weight: 800; color: var(--fg-2); letter-spacing: -0.02em; display: flex; align-items: center; gap: 8px; }
-    .logo-icon { width: 24px; height: 24px; background: var(--accent); border-radius: 6px; }
+    .logo-icon { width: 24px; height: 24px; background: var(--accent); border-radius: 6px; flex-shrink: 0; }
     .topnav nav { display: flex; gap: var(--gap-lg); }
-    .topnav nav a { font-size: 14px; font-weight: 500; color: var(--muted); }
+    .topnav nav a { font-size: 14px; font-weight: 500; color: var(--muted); white-space: nowrap; }
     .topnav nav a:hover, .topnav nav a.active { color: var(--fg-2); }
+    .topnav .btn { flex-shrink: 0; }
+
+    .nav-toggle {
+      display: none; flex-direction: column; gap: 5px; cursor: pointer;
+      background: none; border: none; padding: 8px; z-index: 200;
+    }
+    .nav-toggle span {
+      display: block; width: 22px; height: 2px; background: var(--fg-2);
+      border-radius: 2px; transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    .nav-toggle.is-active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-toggle.is-active span:nth-child(2) { opacity: 0; }
+    .nav-toggle.is-active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .nav-overlay {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+      z-index: 50; opacity: 0; transition: opacity 0.3s ease;
+    }
+    .nav-overlay.is-open { display: block; opacity: 1; }
+
+    @media (max-width: 820px) {
+      .topnav nav {
+        position: fixed; top: 0; right: -280px; width: 260px; height: 100vh;
+        background: var(--surface-deep); flex-direction: column; gap: 4px;
+        padding: 80px 24px 24px; z-index: 100; transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border-left: 1px solid var(--border); box-shadow: -20px 0 40px rgba(0,0,0,0.4);
+      }
+      .topnav nav.is-open { right: 0; }
+      .topnav nav a { font-size: 16px; padding: 12px 16px; border-radius: 6px; white-space: normal; }
+      .topnav nav a:hover { background: var(--fg-soft); }
+      .topnav .btn { display: none; }
+      .nav-toggle { display: flex; }
+    }
+    @media (max-width: 480px) {
+      .topnav-inner { padding-block: 12px; }
+      .logo { font-size: 16px; }
+    }
 
     .btn {
       display: inline-flex; align-items: center; justify-content: center;
@@ -239,8 +276,27 @@
     .wiki-card h3 { font-size: 18px; margin-bottom: 8px; color: var(--accent); }
     .wiki-card p { font-size: 14px; color: var(--muted); margin: 0; line-height: 1.6; }
 
-    .pagefoot { padding-block: 64px; border-top: 1px solid var(--border); color: var(--muted); font-size: 14px; }
-    .pagefoot-inner { display: flex; justify-content: space-between; align-items: center; }
+    .pagefoot { padding-block: clamp(40px, 6vw, 64px); border-top: 1px solid var(--border); color: var(--muted); font-size: 14px; }
+    .pagefoot-inner { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+    @media (max-width: 600px) { .pagefoot-inner { flex-direction: column; text-align: center; } }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .reveal {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.visible {
+      opacity: 1; transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
   </style>
 </head>
 <body>
@@ -250,14 +306,20 @@
         <div class="logo-icon"></div>
         DEEP DIVE ONLINE
       </a>
-      <nav>
+      <nav id="mainNav">
         <a href="index.html">Главная</a>
         <a href="wiki.html" class="active">Вики</a>
         <a href="map.html">Карта</a>
         <a href="donate.html">Донат</a>
+        <a href="minigame.html">Мини-игра</a>
+        <a href="#" class="btn btn-primary" style="display:none; text-align:center; margin-top:8px;" id="mobileCta">Играть сейчас</a>
       </nav>
-      <button class="btn btn-primary">Играть сейчас</button>
+      <button class="btn btn-primary" id="desktopCta">Играть сейчас</button>
+      <button class="nav-toggle" id="navToggle" aria-label="Меню">
+        <span></span><span></span><span></span>
+      </button>
     </div>
+    <div class="nav-overlay" id="navOverlay"></div>
   </header>
 
   <main class="container">
@@ -292,31 +354,31 @@
 
       <!-- Main Content -->
       <article class="wiki-content">
-        <section id="classes" data-od-id="wiki-classes">
+        <section id="classes" class="reveal" data-od-id="wiki-classes">
           <h1>Классы персонажей</h1>
           <p>В <strong>Deep Dive Online</strong> система классов построена на гибкости и специализации. Каждый игрок начинает путь "Новичком" и на 10-м уровне выбирает одну из четырех базовых специализаций, которые в дальнейшем разветвляются на десятки элитных путей.</p>
           
           <div class="card-grid">
-            <div class="wiki-card">
+            <div class="wiki-card reveal reveal-delay-1">
               <h3>Мечник (Swordsman)</h3>
               <p>Мастер ближнего боя. Высокая защита и стабильный урон. Идеален для тех, кто предпочитает быть на острие атаки и защищать союзников.</p>
             </div>
-            <div class="wiki-card">
+            <div class="wiki-card reveal reveal-delay-2">
               <h3>Лучник (Archer)</h3>
               <p>Специалист по дальнему бою. Высокая скорость атаки и шанс критического удара. Может устанавливать магические ловушки.</p>
             </div>
-            <div class="wiki-card">
+            <div class="wiki-card reveal reveal-delay-3">
               <h3>Маг (Mage)</h3>
               <p>Повелитель стихий. Огромный урон по площади, но крайне низкая выживаемость. Требует слаженной работы группы и прикрытия.</p>
             </div>
-            <div class="wiki-card">
+            <div class="wiki-card reveal reveal-delay-4">
               <h3>Тень (Rogue)</h3>
               <p>Мастер скрытности и быстрых атак. Наносит сокрушительный урон одиночным целям и эффективно использует яды.</p>
             </div>
           </div>
         </section>
 
-        <section id="bestiary" data-od-id="wiki-bestiary">
+        <section id="bestiary" class="reveal" data-od-id="wiki-bestiary">
           <h2>Бестиарий</h2>
           <p>Мир населен опасными существами, адаптированными к различным условиям обитания. Каждая зона имеет своих уникальных монстров и мировых боссов, требующих тактического подхода.</p>
           
@@ -343,7 +405,7 @@
           </div>
         </section>
 
-        <section id="crafting" data-od-id="wiki-crafting">
+        <section id="crafting" class="reveal" data-od-id="wiki-crafting">
           <h2>Система крафта</h2>
           <p>Крафт в нашей игре — это не просто вспомогательная функция, а полноценная профессия. Игроки могут собирать редкие ресурсы и создавать легендарное снаряжение, которое невозможно найти в подземельях.</p>
           <div style="display: flex; flex-direction: column; gap: 12px;">
@@ -362,7 +424,7 @@
           </div>
         </section>
 
-        <section id="lore" data-od-id="wiki-lore">
+        <section id="lore" class="reveal" data-od-id="wiki-lore">
           <h2>Лор мира</h2>
           <p>История <strong>Deep Dive Online</strong> началась с Великого Слияния реальностей. Две тысячи лет назад мир был разделен на 100 парящих этажей, каждый из которых представляет собой уникальную экосистему со своими законами физики и магическими потоками.</p>
           <p>Основная цель игроков — пройти все испытания, победить стражей этажей и достичь самой вершины, где, согласно легендам, ждет сам Создатель системы, способный исполнить любое желание.</p>
@@ -441,6 +503,56 @@
 
     // Initial call to set active link on page load
     handleScroll();
+
+    // Scroll reveal animations
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+  </script>
+
+  <script>
+    const navToggle = document.getElementById('navToggle');
+    const mainNav = document.getElementById('mainNav');
+    const navOverlay = document.getElementById('navOverlay');
+    const mobileCta = document.getElementById('mobileCta');
+    const desktopCta = document.getElementById('desktopCta');
+
+    function isMobile() { return window.innerWidth <= 820; }
+
+    function updateNav() {
+      if (isMobile()) {
+        mobileCta.style.display = 'block';
+        desktopCta.style.display = 'none';
+      } else {
+        mobileCta.style.display = 'none';
+        desktopCta.style.display = 'inline-flex';
+        mainNav.classList.remove('is-open');
+        navOverlay.classList.remove('is-open');
+        navToggle.classList.remove('is-active');
+      }
+    }
+
+    navToggle.addEventListener('click', () => {
+      mainNav.classList.toggle('is-open');
+      navOverlay.classList.toggle('is-open');
+      navToggle.classList.toggle('is-active');
+    });
+
+    navOverlay.addEventListener('click', () => {
+      mainNav.classList.remove('is-open');
+      navOverlay.classList.remove('is-open');
+      navToggle.classList.remove('is-active');
+    });
+
+    window.addEventListener('resize', updateNav);
+    updateNav();
   </script>
 </body>
 </html>
