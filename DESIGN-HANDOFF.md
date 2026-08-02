@@ -11,7 +11,7 @@ This archive is the source of truth for turning the design into production code.
 
 ## Source map
 - Primary entry: `index.html`
-- HTML screens detected: 4
+- HTML screens detected: 5
 - Stylesheets detected: 0
 - Script/component files detected: 0
 - Supporting assets detected: 0
@@ -50,7 +50,8 @@ For responsive web exports, treat these as a modern breakpoint system for one ad
 ## Color and brand contract
 - Use the exported design tokens and product/domain context as the color source of truth.
 - Do not introduce warm beige / cream / peach / pink / orange-brown background washes unless they are already explicit brand/reference colors in the export.
-- No obvious token stylesheet was detected; sample colors from the entry file and convert them into named tokens before coding.
+- Brand: DeebSilk Studio (Project Origin, Fantasy Action RPG, Unity 6, PC + VR / OpenXR / Meta Quest). Palette is neon-cyan on deep navy — see `:root` tokens in `index.html` and `brand-spec.md`.
+- Tokens are defined as CSS custom properties in `index.html` `:root`; extract them into named tokens before coding.
 
 ## Implementation sequence for AI coding tools
 1. Open `index.html` and `DESIGN-MANIFEST.json`; identify every screen file, launcher/overview file, app module, and interaction before coding.
@@ -66,6 +67,7 @@ For responsive web exports, treat these as a modern breakpoint system for one ad
 - `donate.html`
 - `index.html`
 - `map.html`
+- `minigame.html`
 - `wiki.html`
 
 ## Styles

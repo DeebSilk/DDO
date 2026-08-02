@@ -7,12 +7,14 @@
       "donate.html",
       "index.html",
       "map.html",
+      "minigame.html",
       "wiki.html"
     ],
     "html": [
       "donate.html",
       "index.html",
       "map.html",
+      "minigame.html",
       "wiki.html"
     ],
     "css": [],
@@ -34,6 +36,11 @@
       "file": "map.html",
       "role": "screen",
       "implementationNote": "Preserve visual hierarchy, responsive behavior, and interactive states from this screen."
+    },
+    {
+      "file": "minigame.html",
+      "role": "screen",
+      "implementationNote": "Playable turn-based RPG arena with client-side game loop and localStorage persistence; preserve game state behavior."
     },
     {
       "file": "wiki.html",
